@@ -10,7 +10,7 @@ volume = st.number_input("Thể tích của mẻ (mL):", min_value=1.0, max_valu
 st.header("2. Điều chỉnh thành phần")
 st.write("Sử dụng thanh trượt để điều chỉnh 6 thành phần trong giới hạn.")
 limits = {
-    "Bưởi": {"max":20/7, "default":20/7/2},
+    "Bưởi": {"max":2.0, "default":1.0},
     "Rasberry:": {"max": 2.0, "default": 1.0},
     "Trà": {"max": 2.0, "default": 1.0},
     "Hoa Nhài": {"max": 2.0, "default": 1.0},
