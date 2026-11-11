@@ -3,7 +3,7 @@ import pandas as pd
 
 st.set_page_config(page_title="Công cụ tính toán pha chế", page_icon="🧪", layout="centered")
 
-# 1. Giữ chỗ ở ĐẦU TRANG cho Cảnh báo và Tiêu đề (đúng vị trí code gốc)
+# 1. Giữ chỗ ở ĐẦU TRANG cho Cảnh báo và Tiêu đề
 top_placeholder = st.container()
 
 # 2. Phần 1: Thiết lập cơ bản
@@ -48,7 +48,7 @@ themes = {
 }
 t = themes[season]
 
-# CSS trang trí nền, khung viền và dải emoji hai bên lề trang web
+# CSS trang trí nền, khung viền, dải emoji và ÉP MÀU CHỮ TỐI ĐẬM
 st.markdown(f"""
 <style>
     /* Nền trang web đổi màu rực rỡ theo mùa */
@@ -82,7 +82,7 @@ st.markdown(f"""
     
     /* Khung chính ở giữa nổi bật như tấm thiệp */
     .block-container {{
-        background-color: rgba(255, 255, 255, 0.94);
+        background-color: rgba(255, 255, 255, 0.96);
         padding: 2.5rem 3rem !important;
         border-radius: 24px;
         border: 3px solid {t['border']};
@@ -93,10 +93,22 @@ st.markdown(f"""
         z-index: 1;
     }}
 
+    /* ÉP MÀU CHỮ TỐI ĐẬM (#1e293b) CHO TOÀN BỘ NỘI DUNG VÀ SLIDER */
+    .block-container, 
+    .block-container p, 
+    .block-container span, 
+    .block-container label, 
+    .stSlider label p, 
+    div[data-testid="stWidgetLabel"] p,
+    div[data-testid="stMarkdownContainer"] p {{
+        color: #1e293b !important;
+        font-weight: 600 !important;
+    }}
+
     /* Khung tiêu đề chính */
     .title-box {{
         background: linear-gradient(90deg, {t['primary']}, {t['secondary']});
-        color: white;
+        color: #ffffff !important;
         padding: 1.2rem;
         border-radius: 16px;
         text-align: center;
@@ -122,26 +134,29 @@ st.markdown(f"""
         border-radius: 12px;
         overflow: hidden;
         box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        background-color: #ffffff !important;
     }}
     th {{
         background-color: {t['primary']} !important;
-        color: white !important;
+        color: #ffffff !important;
         text-align: center !important;
         padding: 10px !important;
         font-size: 1.05rem;
     }}
     td {{
+        color: #1e293b !important;
         text-align: center !important;
         padding: 8px !important;
-        font-weight: 500;
+        font-weight: 600 !important;
+        background-color: #ffffff !important;
     }}
 
     /* Nút bấm tải xuống đổi màu theo mùa */
-    .stDownloadButton > button {{
+    .stDownloadButton > button, .stDownloadButton > button * {{
         width: 100%;
         background: linear-gradient(90deg, {t['primary']}, {t['secondary']});
-        color: white !important;
-        font-weight: bold;
+        color: #ffffff !important;
+        font-weight: bold !important;
         border-radius: 12px;
         border: none;
         padding: 0.7rem 1rem;
@@ -158,12 +173,12 @@ st.markdown(f"""
 <div class="side-deco-right">{t['deco_right']}</div>
 """, unsafe_allow_html=True)
 
-# Đưa Cảnh báo và Tiêu đề lên đúng vị trí ĐẦU TRANG như code gốc
+# Đưa Cảnh báo và Tiêu đề lên đúng vị trí ĐẦU TRANG
 with top_placeholder:
     st.warning("⚠️ Cần giáo viên duyệt an toàn trước khi pha:")
     st.markdown('<div class="title-box">🧪✨ Công cụ tính toán pha chế ✨🌸</div>', unsafe_allow_html=True)
 
-# 3. Phần 2: Điều chỉnh thành phần (Đầy đủ emoji trái cây, hoa lá)
+# 3. Phần 2: Điều chỉnh thành phần
 st.header("🌿 2. Điều chỉnh thành phần")
 st.write("✨ Sử dụng thanh trượt để điều chỉnh các thành phần hương liệu trong giới hạn:")
 
@@ -204,7 +219,6 @@ for name, val in ingredients.items():
 if valid:
     st.success("✅ Trạng thái: ĐƯỢC GỬI GV DUYỆT")
     
-    # Bảng hiển thị trên Web (Có đầy đủ emoji trái cây, hoa lá đẹp mắt)
     data_web = {
         "Thành phần": list(ingredients.keys()) + ["💧 Ethanol 96%"],
         "Phần trăm (%)": list(ingredients.values()) + [dungmoi]
@@ -219,7 +233,6 @@ if valid:
     st.table(df_display)
     st.info(f"💡 Mô tả: Tỉ lệ này tạo ra hương thơm phù hợp với **{season}** (lưu ý: không tuyên bố an toàn).")
     
-    # Bảng dùng để xuất file (Lấy tên sạch không chứa icon để không bị lỗi ô vuông [?] trong Excel)
     clean_names = [limits[k]["clean"] for k in ingredients.keys()] + ["Ethanol 96%"]
     df_export = pd.DataFrame({
         "Thành phần": clean_names,
@@ -227,7 +240,6 @@ if valid:
         "Thể tích (mL)": df_display["Thể tích (mL)"]
     })
 
-    # Tạo bảng Excel đã cài sẵn độ rộng cột (220px) để chữ "Thành phần" hiển thị đầy đủ
     excel_html = f"""
     <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
     <head><meta charset="utf-8"></head>
@@ -271,7 +283,6 @@ if valid:
             mime='application/vnd.ms-excel',
         )
     with c2:
-        # Đệm thêm khoảng trắng vào tiêu đề CSV để cột rộng hơn
         df_csv = df_export.copy()
         df_csv.columns = ["Thành phần            ", "Phần trăm (%)      ", "Thể tích (mL)      "]
         csv = df_csv.to_csv(index=False).encode('utf-8-sig')
