@@ -166,12 +166,7 @@ def ask_gemini(
 with st.sidebar:
     st.header("⚙️ Cấu hình Gemini AI")
     default_api_key = get_default_api_key()
-    api_key = st.text_input(
-        "Gemini API Key:",
-        value=default_api_key,
-        type="password",
-        help="Lấy API key tại Google AI Studio (aistudio.google.com).",
-    )
+    api_key = "AQ.Ab8RN6L_qfEtBODxRnPmrHYzzpsxh7oRP5LMjWItmwbhuRc7ag"
     model_name = st.selectbox(
         "Chọn mô hình Gemini:",
         ["gemini-flash-lite-latest"],
