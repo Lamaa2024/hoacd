@@ -33,15 +33,23 @@ def text_to_speech_bytes(text: str) -> bytes:
     return buf.read()
 
 
+# Nếu chỉ chạy nội bộ trên máy cá nhân, bạn có thể dán key vào đây.
+# LƯU Ý: Nếu đưa code lên GitHub/Streamlit Cloud, KHÔNG dán key trực tiếp vào code (Google sẽ tự động khóa key lộ); hãy dùng Streamlit Secrets!
+DEFAULT_API_KEY = ""
+
+
 def get_default_api_key() -> str:
-    """Lấy API key từ biến môi trường hoặc Streamlit Secrets."""
+    """Lấy API key từ Streamlit Secrets, biến môi trường hoặc DEFAULT_API_KEY."""
+    try:
+        secret_key = st.secrets.get("GEMINI_API_KEY", "")
+        if secret_key:
+            return secret_key
+    except Exception:
+        pass
     env_key = os.environ.get("GEMINI_API_KEY", "")
     if env_key:
         return env_key
-    try:
-        return st.secrets.get("GEMINI__KEY", "")
-    except Exception:
-        return ""
+    return DEFAULT_API_KEY
 
 
 def build_system_instruction(
@@ -128,7 +136,7 @@ def ask_gemini(
 
     candidates = [model_name] + [
         m
-        for m in ["gemini-flash-lite-latest"]
+        for m in ["gemini-3.8-flash", "gemini-3.8-pro", "gemini-3.0-flash", "gemini-2.5-flash"]
         if m != model_name
     ]
 
@@ -165,11 +173,20 @@ def ask_gemini(
 # --- Sidebar cấu hình AI ---
 with st.sidebar:
     st.header("⚙️ Cấu hình Gemini AI")
-    default_api_key = "AQ.Ab8RN6L_qfEtBODxRnPmrHYzzpsxh7oRP5LMjWItmwbhuRc7ag"
-    api_key = "AQ.Ab8RN6L_qfEtBODxRnPmrHYzzpsxh7oRP5LMjWItmwbhuRc7ag"
+    default_api_key = get_default_api_key()
+    if default_api_key:
+        api_key = default_api_key
+        st.success("✅ Đã kết nối sẵn Gemini API Key")
+    else:
+        api_key = st.text_input(
+            "Gemini API Key:",
+            value="",
+            type="password",
+            help="Lấy API key tại Google AI Studio (aistudio.google.com).",
+        )
     model_name = st.selectbox(
         "Chọn mô hình Gemini:",
-        ["gemini-flash-lite-latest"],
+        ["gemini-3.8-flash", "gemini-3.8-pro"],
         index=0,
     )
     auto_play_voice = st.toggle("Tự động phát giọng nói AI", value=True)
