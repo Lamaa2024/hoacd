@@ -39,7 +39,7 @@ def get_default_api_key() -> str:
     if env_key:
         return env_key
     try:
-        return st.secrets.get("GEMINI_API_KEY", "")
+        return st.secrets.get("GEMINI__KEY", "")
     except Exception:
         return ""
 
@@ -165,7 +165,7 @@ def ask_gemini(
 # --- Sidebar cấu hình AI ---
 with st.sidebar:
     st.header("⚙️ Cấu hình Gemini AI")
-    default_api_key = get_default_api_key()
+    default_api_key = "AQ.Ab8RN6L_qfEtBODxRnPmrHYzzpsxh7oRP5LMjWItmwbhuRc7ag"
     api_key = "AQ.Ab8RN6L_qfEtBODxRnPmrHYzzpsxh7oRP5LMjWItmwbhuRc7ag"
     model_name = st.selectbox(
         "Chọn mô hình Gemini:",
