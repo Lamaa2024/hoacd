@@ -136,7 +136,7 @@ def ask_gemini(
 
     candidates = [model_name] + [
         m
-        for m in ["gemini-3.8-flash", "gemini-3.8-pro", "gemini-3.0-flash", "gemini-2.5-flash"]
+        for m in ["gemini-flash-lite-latest"]
         if m != model_name
     ]
 
